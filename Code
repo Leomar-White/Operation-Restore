@@ -1,0 +1,612 @@
+libname OR "File path";
+run;
+
+Proc Import out= or.pre/* denotes the name and location of the dataset in SAS*/ 
+			datafile= "C:\Users\leoma\OneDrive - University of South Florida\Harrel Center\Operation Restore\PRE_TEST.xlsx"  /*denotes the filename and location on the computer*/ 
+			DBMS=XLSX
+			Replace; /*overwrites and existing file in the sas library*/ 
+			Getnames=Yes;
+			Datarow=3;
+			run; 
+
+/*Drop dates and comments*/
+Data or.Demog2;
+set or.demog;
+length Sex $ 30 Race $ 30 Veteran $ 30 Occupation $ 30;
+
+Age=q10; 
+
+if q6= 1 then Sex = 'Male';
+else if q6= 2 then Sex= 'Female'; 
+else Sex = "Prefer not to answer";
+
+if q7= 1 then Race = 'Caucasian'; 
+else if q7= 2 then Race = 'Black/African American'; 
+else if q7= 3 then Race = 'Hispanic'; 
+else if q7= 4 then Race = 'Other'; 
+else Race = 'Prefer not to answer';
+
+if q8= 1 then Veteran = 'Yes'; 
+else if q8= 2 then Veteran = 'No'; 
+else Veteran = 'Prefer not to answer';
+
+if q9= 1 then Occupation = 'Police';
+else if q9= 2 then Occupation = 'Firefighter';
+else if q9= 3 then Occupation = 'EMS';
+else if q9= 4 then Occupation = '911 Operator';
+else if q9= 5 then Occupation = 'Dispatcher';
+else if q9= 6 then Occupation = 'FBI';
+else if q9= 7 then Occupation = 'Other';
+else Occupation = 'Prefer not to answer';
+
+drop q1_1 q10 q6 q7 q8 q9 q8_1;
+run; 
+Data or.pre2;
+set or.pre; 
+pre_Q1 = Q2_1;pre_Q2 = Q2_2;pre_Q3 = Q2_3;pre_Q4 = Q2_4;
+pre_Q5 = Q2_5;pre_Q6 = Q2_6;pre_Q7 = Q2_7;pre_Q8 = Q2_8;
+pre_Q9 = Q2_9;pre_Q10 = Q2_10;pre_Q11 = Q2_11;pre_Q12 = Q2_12;
+pre_Q13 = Q2_13;pre_Q14 = Q2_14;pre_Q15 = Q2_15;pre_Q16 = Q2_16;
+pre_Q17 = Q2_17;pre_Q18 = Q2_18;pre_Q19 = Q2_19;pre_Q20 = Q2_20;
+pre_Q21 = Q2_21;pre_Q22 = Q2_22;pre_Q23 = Q2_23;pre_Q24 = Q2_24;
+drop q1_1 StartDate EndDate	Q2_1	Q2_2	Q2_3	Q2_4	Q2_5	Q2_6	Q2_7	Q2_8	Q2_9	Q2_10	Q2_11	Q2_12	Q2_13	Q2_14	Q2_15	Q2_16	Q2_17	Q2_18	Q2_19	Q2_20	Q2_21	Q2_22	Q2_23	Q2_24;
+run; 
+
+Data or.post2;
+set or.post;
+pst_Q1 = Q2_1;pst_Q2 = Q2_2;pst_Q3 = Q2_3;pst_Q4 = Q2_4;
+pst_Q5 = Q2_5;pst_Q6 = Q2_6;pst_Q7 = Q2_7;pst_Q8 = Q2_8;
+pst_Q9 = Q2_9;pst_Q10 = Q2_10;pst_Q11 = Q2_11;pst_Q12 = Q2_12;
+pst_Q13 = Q2_13;pst_Q14 = Q2_14;pst_Q15 = Q2_15;pst_Q16 = Q2_16;
+pst_Q17 = Q2_17;pst_Q18 = Q2_18;pst_Q19 = Q2_19;pst_Q20 = Q2_20;
+pst_Q21 = Q2_21;pst_Q22 = Q2_22;pst_Q23 = Q2_23;pst_Q24 = Q2_24;
+drop q1_1 StartDate EndDate	Q2_1	Q2_2	Q2_3	Q2_4	Q2_5	Q2_6	Q2_7	Q2_8	Q2_9	Q2_10	Q2_11	Q2_12	Q2_13	Q2_14	Q2_15	Q2_16	Q2_17	Q2_18	Q2_19	Q2_20	Q2_21	Q2_22	Q2_23	Q2_24;
+run; 
+
+Data or.pst90;
+set or._90day;
+/*length Q2_24;*/
+pst90_Q1 = Q2_1;pst90_Q2 = Q2_2;pst90_Q3 = Q2_3;pst90_Q4 = Q2_4;
+pst90_Q5 = Q2_5;pst90_Q6 = Q2_6;pst90_Q7 = Q2_7;pst90_Q8 = Q2_8;
+pst90_Q9 = Q2_9;pst90_Q10 = Q2_10;pst90_Q11 = Q2_11;pst90_Q12 = Q2_12;
+pst90_Q13 = Q2_13;pst90_Q14 = Q2_14;pst90_Q15 = Q2_15;pst90_Q16 = Q2_16;
+pst90_Q17 = Q2_17;pst90_Q18 = Q2_18;pst90_Q19 = Q2_19;pst90_Q20 = Q2_20;
+pst90_Q21 = Q2_21;pst90_Q22 = Q2_22;pst90_Q23 = Q2_23;pst90_Q24 = _Q2_24;
+drop Q2_1	Q2_2	Q2_3	Q2_4	Q2_5	Q2_6	Q2_7	Q2_8	Q2_9	Q2_10	Q2_11	Q2_12	Q2_13	Q2_14	Q2_15	Q2_16	Q2_17	Q2_18	Q2_19	Q2_20	Q2_21	Q2_22	Q2_23  _Q2_24;
+run; 
+
+/*Merge*/
+proc sort data= or.Demog2;
+by Q1_2;
+run; 
+proc sort data= or.pre2;
+by Q1_2;
+run; 
+proc sort data= or.post2;
+by Q1_2;
+run; 
+proc sort data= or.pst90;
+by Q1_2;
+run; 
+
+
+data or.Combo;
+merge or.Demog2 (in=in1) or.Pre2 (in=in2) or.Post2 (in=in3) or.Pst90 (in=in4);
+by Q1_2; 
+if in1 and in2 and in3 or in4;
+array pre_array [24] pre_Q1-pre_Q24;
+array pst_array [24] pst_Q1-pst_Q24;
+array pst90_array [24] pst90_Q1-pst90_Q24;
+array delta_1 [24] d1-d24;
+array delta_2 [24] e1-e24;
+array delta_3 [24] f1-f24;
+
+array preF1   [7] pre_q16 pre_q8 pre_q6 pre_q2 pre_q24 pre_q9 pre_q4;
+array postF1  [7] pst_q16 pst_q8 pst_q6 pst_q2 pst_q24 pst_q9 pst_q4;
+array pst90F1 [7] pst90_q16 pst90_q8 pst90_q6 pst90_q2 pst90_q24 pst90_q9 pst90_q4;
+
+array preF2   [3] pre_q17 pre_q22 pre_q5;
+array postF2  [3] pst_q17 pst_q22 pst_q5;
+array pst90F2 [3] pst90_q17 pst90_q22 pst90_q5;
+
+array preF3   [3] pre_q12 pre_q10 pre_q18;
+array postF3  [3] pst_q12 pst_q10 pst_q18;
+array pst90F3 [3] pst90_q12 pst90_q10 pst90_q18;
+
+array preF4   [3] pre_q19 pre_q15 pre_q23;
+array postF4  [3] pst_q19 pst_q15 pst_q23;
+array pst90F4 [3] pst90_q19 pst90_q15 pst90_q23;
+
+array preF5   [4] pre_q1 pre_q7 pre_q20 pre_q13;
+array postF5  [4] pre_q1 pre_q7 pre_q20 pre_q13;
+array pst90F5 [4] pre_q1 pre_q7 pre_q20 pre_q13;
+
+do i= 1 to 24;
+  delta_1[i]= pst_array [i] - pre_array [i];
+end; 
+drop i; 
+
+do i= 1 to 24;
+  delta_2[i]= pst90_array [i] - pre_array [i];
+end; 
+drop i; 
+
+do i= 1 to 24;
+  delta_3[i]= pst90_array [i] - pst_array [i];
+end; 
+drop i; 
+
+Pre_Factor1= (pre_q16 + pre_q8 + pre_q6 + pre_q2 + pre_q24 +pre_q9 + pre_q4)/7;
+Pst_Factor1= (pst_q16 + pst_q8 + pst_q6 + pst_q2 + pst_q24 +pst_q9 + pst_q4)/7;
+Pst90_Factor1= (pst90_q16 +pst90_q8 +pst90_q6 + pst90_q2 + pst90_q24 + pst90_q9 + pst90_q4)/7;
+
+Pre_Factor2= (pre_q17 + pre_q22 + pre_q5)/3;
+Pst_Factor2= (pst_q17 + pst_q22 + pst_q5)/3;
+Pst90_Factor2= (pst90_q17 + pst90_q22 + pst90_q5)/3;
+
+Pre_Factor3= (pre_q12 + pre_q10  + pre_q18)/3;
+Pst_Factor3= (pst_q12 + pst_q10  + pst_q18)/3;
+Pst90_Factor3= (pst90_q12 + pst90_q10  + pst90_q18)/3;
+
+Pre_Factor4= (pre_q19 + pre_q15 + pre_q23)/3;
+Pst_Factor4= (pst_q19 + pst_q15 + pst_q23)/3;
+Pst90_Factor4= (pst90_q19 + pst90_q15 + pst90_q23)/3;
+
+Pre_Factor5= (pre_q1 + pre_q7 + pre_q20 + pre_q13)/4;
+Pst_Factor5= (pst_q1 + pst_q7 + pst_q20 + pst_q13)/4;
+Pst90_Factor5= (pst90_q1 + pst90_q7 + pst90_q20 + pst90_q13)/4;
+
+Total_Pre_Factor= (Pre_Factor1 + Pre_Factor2 + Pre_Factor3 + Pre_Factor4 + Pre_Factor5)/5;
+Total_Post_Factor= (Pst_Factor1 + Pst_Factor2 + Pst_Factor3 + Pst_Factor4 + Pst_Factor5)/5;
+Total_90Day_Factor= (Pst90_Factor1 + Pst90_Factor2 + Pst90_Factor3 + Pst90_Factor4 + Pst90_Factor5)/5;
+
+Diff_a= mean(of d1-d24); /*pre -post diff*/
+Diff_b= mean(of e1-e24); /*pre - 90 day diff*/
+Diff_c= mean(of f1-f24); /*post -90 day diff*/
+
+Pre_Score= mean(of pre_Q1-pre_Q24);
+Post_Score= mean(of pst_Q1-pst_Q24);
+Post_90_score= mean(of pst90_Q1-pst90_Q24);
+
+Tot_Pre_Pst_Diff= Post_Score - Pre_Score; /*total post score - pre score */
+Tot_Pre_90pst_Diff= Post_90_score - Pre_Score ; /*total 90 day score minus - pre score diff*/
+Tot_Post_90pst_Diff= Post_90_score - Post_score; /*toatl 90 day score - pre score */
+
+F1_Pre_Pst_Diff= Pst_Factor1 - Pre_Factor1; /*Factor 1 post score - pre score */
+F2_Pre_Pst_Diff= Pst_Factor2 - Pre_Factor2; /*Factor 2 post score - pre score */
+F3_Pre_Pst_Diff= Pst_Factor3 - Pre_Factor3; /*Factor 3 post score - pre score */
+F4_Pre_Pst_Diff= Pst_Factor4 - Pre_Factor4; /*Factor 4 post score - pre score */
+F5_Pre_Pst_Diff= Pst_Factor5 - Pre_Factor5; /*Factor 5 post score - pre score */
+
+run; 
+/* Descriptive Statistics */
+ proc means data= or.demog2;
+ var age; 
+ title 'Mean age';
+ run; 
+
+
+ proc freq data= or.demog2; 
+ table Sex Race Veteran Occupation/ list nocum nocol; 
+ title 'Frequency of Demographics';
+ run;
+
+
+/*factor analysis*/
+ ods graphics on; 
+ proc factor data=or.combo msa mineigen=1 plots= scree rotate=promax flag=0.4/*method= prinit*/; 
+ var pre_Q1 pre_Q2 pre_Q3 pre_Q4 pre_Q5 pre_Q6 
+	 pre_Q7 pre_Q8 pre_Q9 pre_Q10 pre_Q11 pre_Q12 
+	 pre_Q13 pre_Q14 pre_Q15 pre_Q16 pre_Q17 pre_Q18 
+	 pre_Q19 pre_Q20 pre_Q21 pre_Q22 pre_Q23 pre_Q24;
+title "OR factor Analysis"; 
+run;
+
+/* Descriptive Statistics of Factors */
+/*Pre*/
+proc means data= or.combo;
+ var pre_Factor1 pre_Factor2 pre_Factor3 pre_Factor4 pre_Factor5;
+ title 'Mean Pre Factors';
+ run;
+
+/*Post*/
+proc means data= or.combo;
+ var pst_Factor1 pst_Factor2 pst_Factor3 pst_Factor4 pst_Factor5;
+ title 'Mean Post Factors';
+ run;
+
+/*90 day*/
+proc means data= or.combo;
+ var pst90_Factor1 pst90_Factor2 pst90_Factor3 pst90_Factor4 pst90_Factor5;
+ title 'Mean 90 day Factors';
+ run;
+
+/*total*/
+proc means data= or.combo;
+ var Total_Pre_Factor Total_Post_Factor Total_90Day_Factor;
+ title 'Mean Total Factors';
+ run;
+
+/*/test of associations/ */
+
+ /* Cronbach Alpha*/
+ ods graphics on;
+title 'Cronbach';
+proc corr data= or.combo nomiss alpha plots=matrix;
+ var pre_q16 pre_q8 pre_q6 pre_q2 pre_q24 pre_q9 pre_q4;
+ run;
+ods graphics off;
+
+ ods graphics on;
+title 'Cronbach factor 2';
+proc corr data= or.combo nomiss alpha plots=matrix;
+ var pre_q17 pre_q22 pre_q5;
+ run;
+ods graphics off;
+
+ ods graphics on;
+title 'Cronbach factor 3';
+proc corr data= or.combo nomiss alpha plots=matrix;
+ var pre_q12 pre_q10 pre_q18;
+ run;
+ods graphics off;
+
+ ods graphics on;
+title 'Cronbach factor 4';
+proc corr data= or.combo nomiss alpha plots=matrix;
+ var pre_q19 pre_q15 pre_q23;
+ run;
+ods graphics off;
+
+ ods graphics on;
+title 'Cronbach factor 5';
+proc corr data= or.combo nomiss alpha plots=matrix;
+ var pre_q1 pre_q7 pre_q20 pre_q13;
+ run;
+ods graphics off;
+
+/*cronbach for total*/
+ods graphics on;
+title 'Cronbach for total';
+proc corr data= or.combo nomiss alpha plots=matrix;
+ var pre_Q1 pre_Q2 pre_Q4 pre_Q5 pre_Q6 
+	 pre_Q7 pre_Q8 pre_Q9 pre_Q10 pre_Q11 pre_Q12 
+	 pre_Q13 pre_Q14 pre_Q15 pre_Q16 pre_Q17 pre_Q18 
+	 pre_Q19 pre_Q20 pre_Q21 pre_Q22 pre_Q23 pre_Q24;
+ run;
+ods graphics off;
+
+/*4*/
+proc means data= or.pre2;
+var pre_q19 pre_q15 pre_q23;
+title 'Mean Pre Factors 4';
+run;
+
+/*5*/
+proc means data= or.pre2;
+ var pre_q1 pre_q7 pre_q20 pre_q13;
+ title 'Mean Pre Factors 5';
+ run;
+
+/* Descriptive Statistics of Post Factors */
+/*1*/
+proc means data= or.post2;
+ var pst_q16 pst_q8 pst_q6 pst_q2 pst_q24 pst_q9 pst_q4;
+ title 'Mean Post Factors 1';
+ run;
+
+/*2*/
+proc means data= or.post2;
+ var pst_q17 pst_q22 pst_q5; 
+ title 'Mean Post Factors 2';
+ run;
+
+/*3*/
+proc means data= or.post2;
+var pst_q12 pst_q10 pst_q18;
+title 'Mean Post Factors 3';
+run;
+
+/*4*/
+proc means data= or.post2;
+var pst_q19 pst_q15 pst_q23;
+title 'Mean Post Factors 4';
+run;
+
+/*5*/
+proc means data= or.post2;
+ var pst_q1 pst_q7 pst_q20 pst_q13;
+ title 'Mean Post Factors 5';
+ run;
+
+ /* Descriptive Statistics of 90 Day Post Factors */
+/*1*/
+proc means data= or.pst90;
+ var pst90_q16 pst90_q8 pst90_q6 pst90_q2 pst90_q24 pst90_q9 pst90_q4;
+ title 'Mean 90 Post Factors 1';
+ run;
+
+/*2*/
+proc means data= or.pst90;
+ var pst90_q17 pst90_q22 pst90_q5; 
+ title 'Mean 90 Post Factors 2';
+ run;
+
+/*3*/
+proc means data= or.pst90;
+var pst90_q12 pst90_q10 pst90_q18;
+title 'Mean 90 Post Factors 3';
+run;
+
+/*4*/
+proc means data= or.pst90;
+var pst90_q19 pst90_q15 pst90_q23;
+title 'Mean 90 Post Factors 4';
+run;
+
+/*5*/
+proc means data= or.pst90;
+ var pst90_q1 pst90_q7 pst90_q20 pst90_q13;
+ title 'Mean 90 Post Factors 5';
+ run;
+
+ proc means data= or.pst90;
+ var pst90_q1 pst90_q7 pst90_q20 pst90_q13;
+ title 'Mean 90 Post Factors 5';
+ run;
+
+/*testing assumptions*/
+proc univariate data= or.combo normal;
+var pre_score post_score post_90_score;
+run;
+
+/*Sign Rank test */
+title 'Normality Test';
+proc univariate data= or.combo3 normal;
+var Pre_Pst_Diff Pre_90pst_Diff Post_90pst_Diff;
+run;
+
+/* testing bi-variate associations */
+proc glm data=or.combo2;
+title "sex";
+class x1;
+model Pre_Pst_Diff=x1;
+means x1/ cldiff bon; 
+run;
+
+proc glm data= or.combo2;
+title "race";
+class x2;
+model pre_pst_diff= x2; 
+means x2/ cldiff bon;
+run;
+quit;
+
+proc ttest data=or.combo2;
+title "veteran";
+class veteran;
+var Pre_Pst_Diff;
+run; 
+
+proc glm data= or.combo2;
+title "occupation";
+class x3;
+model pre_pst_diff=x3; 
+means bon; 
+run;
+quit;
+
+proc corr data=or.combo2;
+title "age";
+var Pre_Pst_Diff age;
+run; 
+
+/*data with dummy vars*/
+data or.combo2; 
+set or.combo;
+x1=0; if sex = 'Female' then x1=1; if if sex = 'Male' then x1=2; 
+x2=0; if race= 'Caucasian' then x2=1; if race= 'Black/African American' then x2=2;
+x3=0; if veteran = 'Yes' then x3=1; 
+x4=0; if occupation = 'Police' then x4=1; if occupation = 'Firefighter' then x4=2;  
+	  if occupation = 'EMS' then x4=3; if occupation = 'Dispatcher' then x4=4;
+x5=age;
+run;
+
+/*DATA WITH COLAPSED VARS and GROWTH FLAG*/
+data or.combo3;
+    set or.combo;
+    length race2 $30 sex2 $30 occupation2 $30; 
+    
+    /* Sex Assignment */
+    if sex = 'Female' then sex2 = 'Female'; 
+    else if sex = 'Male' then sex2 = 'Male'; 
+    else sex2 = ''; 
+    
+    /* Race Assignment */
+    if race in ('Black/African American', 'Hispanic') then race2 = 'Non Caucasian'; 
+    else if race = 'Caucasian' then race2 = 'Caucasian';  
+    else race2 = '';
+    
+    /* Occupation Assignment */
+    if occupation = 'Police' then occupation2 = 'Police'; 
+    else if occupation = 'Firefighter' then occupation2 = 'Firefighter';
+	else if occupation = 'EMS' then occupation2 = 'EMS';
+    else occupation2 = 'Other';
+
+	/*Dummies*/
+	x1=0; if sex2 = 'Female' then x1=1;
+	x2=0; if race2= 'Non Caucasian' then x2=1; 
+	x3=0; if veteran = 'Yes' then x3=1; 
+	x4=0; if occupation2 = 'Firefighter' then x4=1; if occupation2 = 'EMS' then x4=2; if occupation2 = 'Other' then x4=3;   
+	x5=age;
+
+    /*Overall Change / gRoth Flag*/
+	if Post_Score > Pre_Score then growth_flag = 1;
+	else if Post_Score < Pre_Score then growth_flag = -1;
+	else growth_flag = 0;
+
+    /* Age category */
+	if age < 40.6 then age_cat = "Young";
+	else age_cat = "Old";
+
+run;
+
+/*Linear Regression */
+proc reg data= or.combo2 alpha=.05; 
+title'Stepwise Linear Regression';
+model Pre_Pst_Diff = x1 x2 x3 x4 x5 pre_score/ 
+		cli aic selection=stepwise resquare cp ; 
+run;quit; 
+
+/*New Bivariate Associations*/
+proc ttest data=or.combo3;
+title "Sex 2";
+class sex2;
+var tot_Pre_Pst_Diff;
+run;
+
+proc ttest data=or.combo3;
+title "Race 2";
+class race2;
+var Pre_Pst_Diff;
+run;
+
+proc glm data=or.combo3;
+    title "Occupation 2";
+    class x4;
+    model pre_pst_diff = x4; 
+    lsmeans x4 / pdiff=bon; /* Use lsmeans for Bonferroni adjustment */
+run;
+quit;
+
+/*Linear Regression with updated vars*/
+proc reg data=or.combo3 alpha=.05; 
+    title 'Stepwise Linear Regression';
+    model tot_Pre_Pst_Diff = x1 x2 x3 x4 x5 pre_score / 
+        cli aic selection=stepwise rsquare cp;
+run;
+quit;
+
+proc means data= or.combo3;
+var Pre_Pst_Diff;
+title 'Mean Diff Post - Pre';
+run;
+
+/*t-test on the diffrence in post vs pre scores among the sub factors */
+proc ttest data=or.combo3;
+title "Factor 1";
+paired Pst_Factor1 * Pre_Factor1;
+run;
+
+proc ttest data=or.combo3;
+title "Factor 2";
+paired Pst_Factor2 * Pre_Factor2;
+run;
+
+proc ttest data=or.combo3;
+title "Factor 3";
+paired Pst_Factor3 * Pre_Factor3;
+run;
+
+proc ttest data=or.combo3;
+title "Factor 4";
+paired Pst_Factor4 * Pre_Factor4;
+run;
+
+proc ttest data=or.combo3;
+title "Factor 5";
+paired Pst_Factor5 * Pre_Factor5;
+run;
+
+proc ttest data=or.combo3;
+title "Total";
+paired Post_Score * Pre_Score;
+run;
+
+proc glm data= or.combo3;
+title "occupation";
+class x4;
+model tot_pre_pst_diff= x4; 
+means x4/ cldiff bon; 
+run;
+quit;
+
+/*Proportion of growth among participanst*/
+title "Proportion of growth among participanst";
+proc freq data= or.combo3; 
+table growth_flag;
+run;
+
+/*Changes in PTGI scores by demographcs*/
+proc means data= or.combo3;
+class sex;
+var tot_pre_pst_diff; 
+run;
+
+proc means data= or.combo3;
+class race;
+var tot_pre_pst_diff; 
+run;
+proc means data= or.combo3;
+class veteran;
+var tot_pre_pst_diff; 
+run;
+proc means data= or.combo3;
+class occupation;
+var tot_pre_pst_diff; 
+run;
+proc means data= or.combo3;
+class age_cat;
+var tot_pre_pst_diff; 
+run;
+
+/*Changes in PTGI scores by demographcs [sub factors] */
+/*Sex*/
+proc means data= or.combo3;
+class sex;
+var tot_pre_pst_diff Post_Score Pre_Score;
+run;
+proc means data= or.combo3;
+class sex;
+var F1_Pre_Pst_Diff F2_Pre_Pst_Diff F3_Pre_Pst_Diff F4_Pre_Pst_Diff F5_Pre_Pst_Diff;
+run;
+
+/*Race*/
+proc means data= or.combo3;
+class race2;
+var tot_pre_pst_diff Pre_Score Post_Score;
+run;
+proc means data= or.combo3;
+class race2;
+var F1_Pre_Pst_Diff F2_Pre_Pst_Diff F3_Pre_Pst_Diff F4_Pre_Pst_Diff F5_Pre_Pst_Diff;
+run;
+
+/*Veteran*/
+proc means data= or.combo3;
+class veteran;
+var tot_pre_pst_diff Pre_Score Post_Score;
+run;
+proc means data= or.combo3;
+class veteran;
+var F1_Pre_Pst_Diff F2_Pre_Pst_Diff F3_Pre_Pst_Diff F4_Pre_Pst_Diff F5_Pre_Pst_Diff;
+run;
+
+/*Occupation*/
+proc means data= or.combo3;
+class occupation2;
+var tot_pre_pst_diff Pre_Score Post_Score;
+run;
+proc means data= or.combo3;
+class occupation2;
+var F1_Pre_Pst_Diff F2_Pre_Pst_Diff F3_Pre_Pst_Diff F4_Pre_Pst_Diff F5_Pre_Pst_Diff;
+run;
+
+/*Age*/
+proc means data= or.combo3;
+class age_cat;
+var tot_pre_pst_diff Pre_Score Post_Score;
+run;
+proc means data= or.combo3;
+class age_cat;
+var F1_Pre_Pst_Diff F2_Pre_Pst_Diff F3_Pre_Pst_Diff F4_Pre_Pst_Diff F5_Pre_Pst_Diff;
+run;
