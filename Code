@@ -2,7 +2,7 @@ libname OR "File path";
 run;
 
 Proc Import out= or.pre/* denotes the name and location of the dataset in SAS*/ 
-			datafile= "C:\Users\leoma\OneDrive - University of South Florida\Harrel Center\Operation Restore\PRE_TEST.xlsx"  /*denotes the filename and location on the computer*/ 
+			datafile= "file path"  /*denotes the filename and location on the computer*/ 
 			DBMS=XLSX
 			Replace; /*overwrites and existing file in the sas library*/ 
 			Getnames=Yes;
